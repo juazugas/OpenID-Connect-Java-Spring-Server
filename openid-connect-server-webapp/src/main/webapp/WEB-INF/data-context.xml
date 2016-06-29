@@ -56,7 +56,7 @@
 
 	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="jdbcUrl" value="jdbc:mysql://testimasd2/oidc" />
+		<property name="jdbcUrl" value="jdbc:mysql://192.168.0.104/oic" />
 		<property name="username" value="root" />
 		<property name="password" value="Pass4Test" />		
 	</bean>

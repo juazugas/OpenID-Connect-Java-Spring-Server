@@ -7,7 +7,7 @@
 <html lang="${pageContext.response.locale}">
 <head>
 
-    <base href="${config.issuer}">
+    <base href="${config.base}">
 
     <meta charset="utf-8">
     <title>${config.topbarTitle} - ${title}</title>
