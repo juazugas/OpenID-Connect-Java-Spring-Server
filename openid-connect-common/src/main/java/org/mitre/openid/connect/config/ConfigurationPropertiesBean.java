@@ -46,6 +46,8 @@ public class ConfigurationPropertiesBean {
 	 */
 	private static final Logger logger = LoggerFactory.getLogger(ConfigurationPropertiesBean.class);
 
+	private String base;
+	
 	private String issuer;
 
 	private String topbarTitle;
@@ -89,6 +91,20 @@ public class ConfigurationPropertiesBean {
 		if (languageNamespaces == null || languageNamespaces.isEmpty()) {
 			logger.error("No configured language namespaces! Text rendering will fail!");
 		}
+	}
+	
+	/**
+	 * @return the base
+	 */
+	public String getBase() {
+		return base;
+	}
+
+	/**
+	 * @param base the base to set
+	 */
+	public void setBase(String base) {
+		this.base = base;
 	}
 
 	/**
