@@ -1,11 +1,9 @@
 /*
 DROP DATABASE IF EXISTS `oidc`;
-CREATE DATABASE IF NOT EXISTS `oic`
+CREATE DATABASE IF NOT EXISTS `oidc`
 DEFAULT CHARACTER SET = utf8
 DEFAULT COLLATE = utf8_unicode_ci;
-
-use `oidc` ;
-*/
+ */
  
 --
 -- Tables for OIDC Server functionality, MySQL
@@ -22,13 +20,13 @@ CREATE TABLE IF NOT EXISTS `access_token` (
     auth_holder_id BIGINT,
     id_token_id BIGINT,
     approved_site_id BIGINT
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `access_token_permissions`;
 CREATE TABLE IF NOT EXISTS `access_token_permissions` (
     access_token_id BIGINT NOT NULL,
     permission_id BIGINT NOT NULL
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `address`;
 CREATE TABLE IF NOT EXISTS address (
@@ -39,7 +37,7 @@ CREATE TABLE IF NOT EXISTS address (
     region VARCHAR(256),
     postal_code VARCHAR(256),
     country VARCHAR(256)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `approved_site`;
 CREATE TABLE IF NOT EXISTS approved_site (
@@ -50,13 +48,13 @@ CREATE TABLE IF NOT EXISTS approved_site (
     access_date TIMESTAMP NULL,
     timeout_date TIMESTAMP NULL,
     whitelisted_site_id BIGINT
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `approved_site_scope`;
 CREATE TABLE IF NOT EXISTS approved_site_scope (
     owner_id BIGINT,
     scope VARCHAR(256)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `authentication_holder`;
 CREATE TABLE IF NOT EXISTS authentication_holder (
@@ -65,45 +63,45 @@ CREATE TABLE IF NOT EXISTS authentication_holder (
     approved BOOLEAN,
     redirect_uri VARCHAR(2048),
     client_id VARCHAR(256)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `authentication_holder_authority`;
 CREATE TABLE IF NOT EXISTS authentication_holder_authority (
     owner_id BIGINT,
     authority VARCHAR(256)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `authentication_holder_resource_id`;
 CREATE TABLE IF NOT EXISTS authentication_holder_resource_id (
     owner_id BIGINT,
     resource_id VARCHAR(2048)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `authentication_holder_response_type`;
 CREATE TABLE IF NOT EXISTS authentication_holder_response_type (
     owner_id BIGINT,
     response_type VARCHAR(2048)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `authentication_holder_extension`;
 CREATE TABLE IF NOT EXISTS authentication_holder_extension (
     owner_id BIGINT,
     extension VARCHAR(2048),
     val VARCHAR(2048)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `authentication_holder_scope`;
 CREATE TABLE IF NOT EXISTS authentication_holder_scope (
     owner_id BIGINT,
     scope VARCHAR(2048)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `authentication_holder_request_parameter`;
 CREATE TABLE IF NOT EXISTS authentication_holder_request_parameter (
     owner_id BIGINT,
     param VARCHAR(2048),
     val VARCHAR(2048)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `saved_user_auth`;
 CREATE TABLE IF NOT EXISTS saved_user_auth (
@@ -111,19 +109,19 @@ CREATE TABLE IF NOT EXISTS saved_user_auth (
     name VARCHAR(1024),
     authenticated BOOLEAN,
     source_class VARCHAR(2048)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `saved_user_auth_authority`;
 CREATE TABLE IF NOT EXISTS saved_user_auth_authority (
     owner_id BIGINT,
     authority VARCHAR(256)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `client_authority`;
 CREATE TABLE IF NOT EXISTS client_authority (
     owner_id BIGINT,
     authority VARCHAR(256)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `authorization_code`;
 CREATE TABLE IF NOT EXISTS authorization_code (
@@ -131,28 +129,28 @@ CREATE TABLE IF NOT EXISTS authorization_code (
     code VARCHAR(256),
     auth_holder_id BIGINT,
     expiration TIMESTAMP NULL
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `client_grant_type`;
 CREATE TABLE IF NOT EXISTS client_grant_type (
     owner_id BIGINT,
     grant_type VARCHAR(2000)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `client_response_type`;
 CREATE TABLE IF NOT EXISTS client_response_type (
     owner_id BIGINT,
     response_type VARCHAR(2000)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `blacklisted_site`;
 CREATE TABLE IF NOT EXISTS blacklisted_site (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     uri VARCHAR(2048)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `client_details`;
-CREATE TABLE IF NOT EXISTS `client_details` (
+CREATE TABLE IF NOT EXISTS client_details (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
 
     client_description VARCHAR(1024),
@@ -197,46 +195,46 @@ CREATE TABLE IF NOT EXISTS `client_details` (
     created_at TIMESTAMP NULL,
     initiate_login_uri VARCHAR(2048),
     clear_access_tokens_on_refresh BOOLEAN DEFAULT true NOT NULL,
-    UNIQUE (client_id)
+    UNIQUE (client_id(255))
 
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED KEY_BLOCK_SIZE=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB ROW_FORMAT=DYNAMIC DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 
 DROP TABLE IF EXISTS `client_request_uri`;
 CREATE TABLE IF NOT EXISTS client_request_uri (
     owner_id BIGINT,
     request_uri VARCHAR(2000)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `client_post_logout_redirect_uri`;
 CREATE TABLE IF NOT EXISTS client_post_logout_redirect_uri (
     owner_id BIGINT,
     post_logout_redirect_uri VARCHAR(2000)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `client_default_acr_value`;
 CREATE TABLE IF NOT EXISTS client_default_acr_value (
     owner_id BIGINT,
     default_acr_value VARCHAR(2000)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `client_contact`;
 CREATE TABLE IF NOT EXISTS client_contact (
     owner_id BIGINT,
     contact VARCHAR(256)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `client_redirect_uri`;
 CREATE TABLE IF NOT EXISTS client_redirect_uri (
     owner_id BIGINT, 
     redirect_uri VARCHAR(2048) 
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `client_claims_redirect_uri`;
 CREATE TABLE IF NOT EXISTS client_claims_redirect_uri (
     owner_id BIGINT, 
     redirect_uri VARCHAR(2048) 
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `refresh_token`;
 CREATE TABLE IF NOT EXISTS refresh_token (
@@ -245,25 +243,25 @@ CREATE TABLE IF NOT EXISTS refresh_token (
     expiration TIMESTAMP NULL,
     auth_holder_id BIGINT,
     client_id BIGINT
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `client_resource`;
 CREATE TABLE IF NOT EXISTS client_resource (
     owner_id BIGINT, 
     resource_id VARCHAR(256) 
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `client_scope`;
 CREATE TABLE IF NOT EXISTS client_scope (
     owner_id BIGINT,
     scope VARCHAR(2048)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `token_scope`;
 CREATE TABLE IF NOT EXISTS token_scope (
     owner_id BIGINT,
     scope VARCHAR(2048)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `system_scope`;
 CREATE TABLE IF NOT EXISTS system_scope (
@@ -275,8 +273,8 @@ CREATE TABLE IF NOT EXISTS system_scope (
     default_scope BOOLEAN DEFAULT false NOT NULL,
     structured BOOLEAN DEFAULT false NOT NULL,
     structured_param_description VARCHAR(256),
-    UNIQUE (scope)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+    UNIQUE (scope(255))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `user_info`;
 CREATE TABLE IF NOT EXISTS user_info (
@@ -302,20 +300,20 @@ CREATE TABLE IF NOT EXISTS user_info (
     updated_time VARCHAR(256),
     birthdate VARCHAR(256),
     src VARCHAR(4096)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `whitelisted_site`;
 CREATE TABLE IF NOT EXISTS whitelisted_site (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     creator_user_id VARCHAR(256),
     client_id VARCHAR(256)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `whitelisted_site_scope`;
 CREATE TABLE IF NOT EXISTS whitelisted_site_scope (
     owner_id BIGINT,
     scope VARCHAR(256)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `pairwise_identifier`;
 CREATE TABLE IF NOT EXISTS pairwise_identifier (
@@ -323,7 +321,7 @@ CREATE TABLE IF NOT EXISTS pairwise_identifier (
     identifier VARCHAR(256),
     sub VARCHAR(256),
     sector_identifier VARCHAR(2048)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `resource_set`;
 CREATE TABLE IF NOT EXISTS resource_set (
@@ -334,13 +332,13 @@ CREATE TABLE IF NOT EXISTS resource_set (
     rs_type VARCHAR(256),
     owner VARCHAR(256) NOT NULL,
     client_id VARCHAR(256)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `resource_set_scope`;
 CREATE TABLE IF NOT EXISTS resource_set_scope (
     owner_id BIGINT NOT NULL,
     scope VARCHAR(256) NOT NULL
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `permission_ticket`;
 CREATE TABLE IF NOT EXISTS permission_ticket (
@@ -348,19 +346,19 @@ CREATE TABLE IF NOT EXISTS permission_ticket (
     ticket VARCHAR(256) NOT NULL,
     permission_id BIGINT NOT NULL,
     expiration TIMESTAMP NULL
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `permission`;
 CREATE TABLE IF NOT EXISTS permission (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     resource_set_id BIGINT
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `permission_scope`;
 CREATE TABLE IF NOT EXISTS permission_scope (
     owner_id BIGINT NOT NULL,
     scope VARCHAR(256) NOT NULL
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `claim`;
 CREATE TABLE IF NOT EXISTS claim (
@@ -369,62 +367,60 @@ CREATE TABLE IF NOT EXISTS claim (
     friendly_name VARCHAR(1024),
     claim_type VARCHAR(1024),
     claim_value VARCHAR(1024)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `claim_to_policy`;
 CREATE TABLE IF NOT EXISTS claim_to_policy (
     policy_id BIGINT NOT NULL,
     claim_id BIGINT NOT NULL
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `claim_to_permission_ticket`;
 CREATE TABLE IF NOT EXISTS claim_to_permission_ticket (
     permission_ticket_id BIGINT NOT NULL,
     claim_id BIGINT NOT NULL
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `policy`;
 CREATE TABLE IF NOT EXISTS policy (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(1024),
     resource_set_id BIGINT
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `policy_scope`;
 CREATE TABLE IF NOT EXISTS policy_scope (
     owner_id BIGINT NOT NULL,
     scope VARCHAR(256) NOT NULL
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `claim_token_format`;
 CREATE TABLE IF NOT EXISTS claim_token_format (
     owner_id BIGINT NOT NULL,
     claim_token_format VARCHAR(1024)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `claim_issuer`;
 CREATE TABLE IF NOT EXISTS claim_issuer (
     owner_id BIGINT NOT NULL,
     issuer VARCHAR(1024)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 DROP TABLE IF EXISTS `saved_registered_client`;
 CREATE TABLE IF NOT EXISTS saved_registered_client (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     issuer VARCHAR(1024),
     registered_client VARCHAR(8192)
-) ENGINE=InnoDB ROW_FORMAT=COMPRESSED DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
-/*
 DROP INDEX `at_tv_idx` ON access_token;
 DROP INDEX `ts_oi_idx` ON token_scope;
 DROP INDEX `at_exp_idx` ON access_token;
 DROP INDEX `rf_ahi_idx` ON refresh_token;
 DROP INDEX `cd_ci_idx` ON client_details;
-*/
 
-CREATE INDEX at_tv_idx ON access_token(token_value(767)) ;
+CREATE INDEX at_tv_idx ON access_token(token_value(255)) ;
 CREATE INDEX ts_oi_idx ON token_scope(owner_id) ;
 CREATE INDEX at_exp_idx ON access_token(expiration) ;
 CREATE INDEX rf_ahi_idx ON refresh_token(auth_holder_id) ;
-CREATE INDEX cd_ci_idx ON client_details(client_id) ;
+CREATE INDEX cd_ci_idx ON client_details(client_id(255)) ;
