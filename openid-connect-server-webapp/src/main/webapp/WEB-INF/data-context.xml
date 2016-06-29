@@ -52,9 +52,15 @@
 	<!-- 
 	<bean id="dataSource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+<<<<<<< HEAD
 		<property name="jdbcUrl" value="jdbc:mysql://localhost/oic" />
 		<property name="username" value="oic" />
 		<property name="password" value="oic" />		
+=======
+		<property name="jdbcUrl" value="jdbc:mysql://192.168.0.104/oic" />
+		<property name="username" value="root" />
+		<property name="password" value="Pass4Test" />		
+>>>>>>> d568b21... Change resources reference from issuer to base.
 	</bean>
 
 	<bean id="jpaAdapter" class="org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter">
