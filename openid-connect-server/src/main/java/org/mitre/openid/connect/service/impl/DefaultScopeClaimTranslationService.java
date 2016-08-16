@@ -68,6 +68,8 @@ public class DefaultScopeClaimTranslationService implements ScopeClaimTranslatio
 		scopesToClaims.put("address", "address");
 		
 		scopesToClaims.put("details", "accountDetails");
+		scopesToClaims.put("properties", "accountProperties");
+		scopesToClaims.put("authorities", "accountAuthorities");
 	}
 
 	/* (non-Javadoc)

@@ -26,6 +26,7 @@ import org.mitre.oauth2.service.ClientDetailsEntityService;
 import org.mitre.openid.connect.model.UserInfo;
 import org.mitre.openid.connect.model.UserInfoClientDetails;
 import org.mitre.openid.connect.repository.UserInfoClientDetailsRepository;
+import org.mitre.openid.connect.repository.UserInfoClientPropertyRepository;
 import org.mitre.openid.connect.repository.UserInfoRepository;
 import org.mitre.openid.connect.service.PairwiseIdentiferService;
 import org.mitre.openid.connect.service.UserInfoService;
@@ -46,6 +47,9 @@ public class DefaultUserInfoService implements UserInfoService {
 	
 	@Autowired
 	private UserInfoClientDetailsRepository userInfoDetailsRepository;
+
+	@Autowired
+	private UserInfoClientPropertyRepository userInfoPropertyRepository;
 
 	@Autowired
 	private ClientDetailsEntityService clientService;
@@ -98,6 +102,7 @@ public class DefaultUserInfoService implements UserInfoService {
             return;
         }
         userInfo.setAccountDetails(userInfoDetailsRepository.getByUserInfo(userInfo));
+        userInfo.setAccountProperties(userInfoPropertyRepository.getByUserInfo(userInfo));
     }
 
 }

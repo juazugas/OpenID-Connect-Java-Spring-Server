@@ -19,8 +19,11 @@ package org.mitre.openid.connect.model;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -84,6 +87,7 @@ public class DefaultUserInfo implements UserInfo {
 	private String updatedTime;
 	private String birthdate;
 	private Set<UserInfoClientDetails> accountDetails;
+	private Set<UserInfoClientProperty> accountProperties;
 	private transient JsonObject src; // source JSON if this is loaded remotely
 
 
@@ -428,7 +432,6 @@ public class DefaultUserInfo implements UserInfo {
 		this.birthdate = birthdate;
 	}
 	
-
 /*    
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "userInfo", targetEntity = DefaultUserInfoClientDetails.class)
     @JoinTable(
@@ -457,6 +460,35 @@ public class DefaultUserInfo implements UserInfo {
             accountDetails.addAll(details);
         }
     }
+
+	/*    
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "userInfo", targetEntity = DefaultUserInfoClientProperty.class)
+    @JoinTable(
+            name = "user_info_property", joinColumns = @JoinColumn(name = "id_user_info"),
+            inverseJoinColumns = @JoinColumn(name = "id_client_details"))
+	 */  
+	@Transient
+	@Override
+	public Set<UserInfoClientProperty> getAccountProperties() {
+	    return accountProperties;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * User infor account properties by client.
+	 * @param properties the user_info properties.
+	 */
+	@Override
+	public void setAccountProperties(Set<UserInfoClientProperty> properties) {
+	    if (null==accountProperties) {
+            accountProperties = new HashSet<>();
+        } else {
+            accountProperties.clear();
+        }
+        if (null!=properties && properties.size()>0) {
+            accountProperties.addAll(properties);
+        }
+	}
 
     /**
      * Sets the user info account by client.
@@ -503,23 +535,9 @@ public class DefaultUserInfo implements UserInfo {
 				obj.add("address", addr);
 			}
 			
-			if (this.getAccountDetails() != null) {
-			    
-			    JsonArray detailsArr = new JsonArray();
-			    for (UserInfoClientDetails userDetails : this.getAccountDetails()) {
-			        JsonObject details = new JsonObject();
-			        details.addProperty("client", userDetails.getClient().getClientId());
-			        details.addProperty("enabled", userDetails.isEnabled());
-			        details.addProperty("nonLocked", userDetails.isAccountNonLocked());
-			        details.addProperty("nonExpired", userDetails.isAccountNonExpired());
-			        if (null!=userDetails.getUsername()) {
-			            details.addProperty("username", userDetails.getUsername());
-			        }
-                    
-			        detailsArr.add(details);
-                }
-			    obj.add("accountDetails", detailsArr);
-			}
+			setAccountDetails(obj);
+			
+			setAccountProperties(obj);
 
 			return obj;
 		} else {
@@ -527,6 +545,53 @@ public class DefaultUserInfo implements UserInfo {
 		}
 
 	}
+    
+    /**
+     * Maps the account properties to Json
+     * @param obj
+     */
+    private void setAccountProperties(JsonObject obj) {
+        if (this.getAccountProperties() != null) {
+            
+            JsonObject propertiesMap = new JsonObject();
+            for (UserInfoClientProperty userProperties : this.getAccountProperties()) {
+                String clientId = userProperties.getClient().getClientId();
+                JsonObject clientObject;
+                if (propertiesMap.has(clientId)) {
+                    clientObject = (JsonObject) propertiesMap.get(clientId); 
+                } else {
+                    clientObject = new JsonObject();
+                    propertiesMap.add(clientId, clientObject);
+                }
+                clientObject.addProperty(userProperties.getProperty(), userProperties.getValue());
+            }
+            obj.add("accountProperties", propertiesMap);
+        }
+    }
+    
+    /**
+     * Maps the account details to Json 
+     * @param obj
+     */
+    private void setAccountDetails(JsonObject obj) {
+        if (this.getAccountDetails() != null) {
+            
+            JsonArray detailsArr = new JsonArray();
+            for (UserInfoClientDetails userDetails : this.getAccountDetails()) {
+                JsonObject details = new JsonObject();
+                details.addProperty("client", userDetails.getClient().getClientId());
+                details.addProperty("enabled", userDetails.isEnabled());
+                details.addProperty("nonLocked", userDetails.isAccountNonLocked());
+                details.addProperty("nonExpired", userDetails.isAccountNonExpired());
+                if (null!=userDetails.getUsername()) {
+                    details.addProperty("username", userDetails.getUsername());
+                }
+                
+                detailsArr.add(details);
+            }
+            obj.add("accountDetails", detailsArr);
+        }
+    }
 
 	/**
 	 * Parse a JsonObject into a UserInfo.
