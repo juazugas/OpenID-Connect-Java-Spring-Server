@@ -19,22 +19,30 @@ package org.mitre.openid.connect.model;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.mitre.openid.connect.model.convert.JsonObjectStringConverter;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
@@ -75,6 +83,7 @@ public class DefaultUserInfo implements UserInfo {
 	private DefaultAddress address;
 	private String updatedTime;
 	private String birthdate;
+	private Set<UserInfoClientDetails> accountDetails;
 	private transient JsonObject src; // source JSON if this is loaded remotely
 
 
@@ -418,8 +427,41 @@ public class DefaultUserInfo implements UserInfo {
 	public void setBirthdate(String birthdate) {
 		this.birthdate = birthdate;
 	}
+	
 
+/*    
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "userInfo", targetEntity = DefaultUserInfoClientDetails.class)
+    @JoinTable(
+            name = "user_info_details", joinColumns = @JoinColumn(name = "id_user_info"),
+            inverseJoinColumns = @JoinColumn(name = "id_client_details"))
+*/	
+	@Transient
+    @Override
+	public Set<UserInfoClientDetails> getAccountDetails() {
+	    return accountDetails;
+	}
+    
+    /**
+     * User info account details by client.
+     * 
+     * @param details
+     */
 	@Override
+    public void setAccountDetails(Set<UserInfoClientDetails> details) {
+        if (null==accountDetails) {
+            accountDetails = new HashSet<>();
+        } else {
+            accountDetails.clear();
+        }
+        if (null!=details && details.size()>0) {
+            accountDetails.addAll(details);
+        }
+    }
+
+    /**
+     * Sets the user info account by client.
+     */
+    @Override
 	public JsonObject toJson() {
 		if (src == null) {
 
@@ -459,6 +501,24 @@ public class DefaultUserInfo implements UserInfo {
 				addr.addProperty("country", this.getAddress().getCountry());
 
 				obj.add("address", addr);
+			}
+			
+			if (this.getAccountDetails() != null) {
+			    
+			    JsonArray detailsArr = new JsonArray();
+			    for (UserInfoClientDetails userDetails : this.getAccountDetails()) {
+			        JsonObject details = new JsonObject();
+			        details.addProperty("client", userDetails.getClient().getClientId());
+			        details.addProperty("enabled", userDetails.isEnabled());
+			        details.addProperty("nonLocked", userDetails.isAccountNonLocked());
+			        details.addProperty("nonExpired", userDetails.isAccountNonExpired());
+			        if (null!=userDetails.getUsername()) {
+			            details.addProperty("username", userDetails.getUsername());
+			        }
+                    
+			        detailsArr.add(details);
+                }
+			    obj.add("accountDetails", detailsArr);
 			}
 
 			return obj;

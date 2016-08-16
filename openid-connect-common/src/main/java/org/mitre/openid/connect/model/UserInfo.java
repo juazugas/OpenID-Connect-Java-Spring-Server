@@ -17,6 +17,7 @@
 package org.mitre.openid.connect.model;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import com.google.gson.JsonObject;
 
@@ -239,5 +240,27 @@ public interface UserInfo extends Serializable {
 	 * @return
 	 */
 	public JsonObject getSource();
+	
+	/**
+	 * The account details by client_details.
+	 * @return
+	 */
+	public Set<UserInfoClientDetails> getAccountDetails();
+	
+	/**
+	 * Sets the user info details by client.
+	 * @param accountdetails
+	 */
+	void setAccountDetails(Set<UserInfoClientDetails> accountdetails);
+	
+	/**
+	 * The user info properties by registered client_details.
 
+	public List<UserInfoClientProperty> getClientProperties();
+     */	
+	/**
+	 * The user_info authorities by registered client_details.
+	public List<UserInfoClientAuthority> getClientAuthorities();
+	 */
+	
 }

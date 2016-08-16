@@ -16,10 +16,16 @@
  *******************************************************************************/
 package org.mitre.openid.connect.service.impl;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.mitre.oauth2.model.ClientDetailsEntity;
 import org.mitre.oauth2.model.ClientDetailsEntity.SubjectType;
 import org.mitre.oauth2.service.ClientDetailsEntityService;
 import org.mitre.openid.connect.model.UserInfo;
+import org.mitre.openid.connect.model.UserInfoClientDetails;
+import org.mitre.openid.connect.repository.UserInfoClientDetailsRepository;
 import org.mitre.openid.connect.repository.UserInfoRepository;
 import org.mitre.openid.connect.service.PairwiseIdentiferService;
 import org.mitre.openid.connect.service.UserInfoService;
@@ -37,6 +43,9 @@ public class DefaultUserInfoService implements UserInfoService {
 
 	@Autowired
 	private UserInfoRepository userInfoRepository;
+	
+	@Autowired
+	private UserInfoClientDetailsRepository userInfoDetailsRepository;
 
 	@Autowired
 	private ClientDetailsEntityService clientService;
@@ -46,10 +55,13 @@ public class DefaultUserInfoService implements UserInfoService {
 
 	@Override
 	public UserInfo getByUsername(String username) {
-		return userInfoRepository.getByUsername(username);
+	    UserInfo userInfo = userInfoRepository.getByUsername(username);
+	    addUserInfoClientRelations(userInfo);
+	    
+		return userInfo;
 	}
 
-	@Override
+    @Override
 	public UserInfo getByUsernameAndClientId(String username, String clientId) {
 
 		ClientDetailsEntity client = clientService.loadClientByClientId(clientId);
@@ -60,6 +72,7 @@ public class DefaultUserInfoService implements UserInfoService {
 			return null;
 		}
 
+	    addUserInfoClientRelations(userInfo);
 		if (SubjectType.PAIRWISE.equals(client.getSubjectType())) {
 			String pairwiseSub = pairwiseIdentifierService.getIdentifier(userInfo, client);
 			userInfo.setSub(pairwiseSub);
@@ -71,7 +84,20 @@ public class DefaultUserInfoService implements UserInfoService {
 
 	@Override
 	public UserInfo getByEmailAddress(String email) {
-		return userInfoRepository.getByEmailAddress(email);
+	    UserInfo userInfo = userInfoRepository.getByEmailAddress(email);
+	    addUserInfoClientRelations(userInfo);
+		return userInfo;
 	}
+	
+	/**
+	 * Adds the relations between client and user_info.
+	 * @param userInfo
+	 */
+    private void addUserInfoClientRelations(final UserInfo userInfo) {
+        if (null==userInfo) {
+            return;
+        }
+        userInfo.setAccountDetails(userInfoDetailsRepository.getByUserInfo(userInfo));
+    }
 
 }
