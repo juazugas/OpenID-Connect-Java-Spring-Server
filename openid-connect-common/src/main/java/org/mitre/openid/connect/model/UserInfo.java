@@ -268,7 +268,14 @@ public interface UserInfo extends Serializable {
 	
 	/**
 	 * The user_info authorities by registered client_details.
-	public List<UserInfoClientAuthority> getClientAuthorities();
 	 */
+	public Set<UserInfoClientAuthority> getAccountAuthorities();
+	
+	/**
+	 * Sets the user_info authorities by client_details.
+	 * 
+	 * @param authorities the authority list.
+	 */
+	public void setAccountAuthorities(Set<UserInfoClientAuthority> authorities);
 	
 }

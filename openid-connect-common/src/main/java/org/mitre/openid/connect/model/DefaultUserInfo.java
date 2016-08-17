@@ -48,6 +48,7 @@ import org.mitre.openid.connect.model.convert.JsonObjectStringConverter;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonPrimitive;
 
 @Entity
 @Table(name="user_info")
@@ -88,6 +89,7 @@ public class DefaultUserInfo implements UserInfo {
 	private String birthdate;
 	private Set<UserInfoClientDetails> accountDetails;
 	private Set<UserInfoClientProperty> accountProperties;
+	private Set<UserInfoClientAuthority> accountAuthorities;
 	private transient JsonObject src; // source JSON if this is loaded remotely
 
 
@@ -490,6 +492,35 @@ public class DefaultUserInfo implements UserInfo {
         }
 	}
 
+	/*    
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "userInfo", targetEntity = DefaultUserInfoClientProperty.class)
+    @JoinTable(
+            name = "user_info_property", joinColumns = @JoinColumn(name = "id_user_info"),
+            inverseJoinColumns = @JoinColumn(name = "id_client_details"))
+	 */  
+	@Transient
+	@Override
+	public Set<UserInfoClientAuthority> getAccountAuthorities() {
+	    return accountAuthorities;
+	}
+	
+	/**
+	 * {@inheritDoc}
+	 * User infor account properties by client.
+	 * @param properties the user_info properties.
+	 */
+	@Override
+	public void setAccountAuthorities(Set<UserInfoClientAuthority> authorities) {
+	    if (null==accountAuthorities) {
+            accountAuthorities = new HashSet<>();
+        } else {
+            accountAuthorities.clear();
+        }
+        if (null!=authorities && authorities.size()>0) {
+            accountAuthorities.addAll(authorities);
+        }
+	}
+
     /**
      * Sets the user info account by client.
      */
@@ -538,6 +569,8 @@ public class DefaultUserInfo implements UserInfo {
 			setAccountDetails(obj);
 			
 			setAccountProperties(obj);
+			
+			setAccountAuthorities(obj);
 
 			return obj;
 		} else {
@@ -566,6 +599,29 @@ public class DefaultUserInfo implements UserInfo {
                 clientObject.addProperty(userProperties.getProperty(), userProperties.getValue());
             }
             obj.add("accountProperties", propertiesMap);
+        }
+    }
+    
+    /**
+     * Maps the account properties to Json
+     * @param obj
+     */
+    private void setAccountAuthorities(JsonObject obj) {
+        if (this.getAccountAuthorities() != null) {
+            
+            JsonObject authoritiesMap = new JsonObject();
+            for (UserInfoClientAuthority userAuthorities : this.getAccountAuthorities()) {
+                String clientId = userAuthorities.getClient().getClientId();
+                JsonArray clientArr;
+                if (authoritiesMap.has(clientId)) {
+                    clientArr = (JsonArray) authoritiesMap.get(clientId); 
+                } else {
+                    clientArr = new JsonArray();
+                    authoritiesMap.add(clientId, clientArr);
+                }
+                clientArr.add(new JsonPrimitive(userAuthorities.getAuthority()));
+            }
+            obj.add("accountAuthorities", authoritiesMap);
         }
     }
     
@@ -637,6 +693,8 @@ public class DefaultUserInfo implements UserInfo {
 			ui.getAddress().setCountry(nullSafeGetString(addr, "country"));
 
 		}
+		
+		// TODO // Extract details, properties and authorities from Json. 
 
 
 		return ui;
