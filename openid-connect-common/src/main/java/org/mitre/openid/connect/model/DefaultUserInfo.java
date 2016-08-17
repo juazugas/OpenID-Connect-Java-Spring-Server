@@ -632,20 +632,25 @@ public class DefaultUserInfo implements UserInfo {
     private void setAccountDetails(JsonObject obj) {
         if (this.getAccountDetails() != null) {
             
-            JsonArray detailsArr = new JsonArray();
+            JsonObject detailsMap = new JsonObject();
             for (UserInfoClientDetails userDetails : this.getAccountDetails()) {
-                JsonObject details = new JsonObject();
-                details.addProperty("client", userDetails.getClient().getClientId());
-                details.addProperty("enabled", userDetails.isEnabled());
-                details.addProperty("nonLocked", userDetails.isAccountNonLocked());
-                details.addProperty("nonExpired", userDetails.isAccountNonExpired());
-                if (null!=userDetails.getUsername()) {
-                    details.addProperty("username", userDetails.getUsername());
+                String clientId = userDetails.getClient().getClientId();
+                JsonObject clientObject;
+                if (detailsMap.has(clientId)) {
+                    clientObject = (JsonObject) detailsMap.get(clientId); 
+                } else {
+                    clientObject = new JsonObject();
+                    detailsMap.add(clientId, clientObject);
                 }
                 
-                detailsArr.add(details);
+                clientObject.addProperty("enabled", userDetails.isEnabled());
+                clientObject.addProperty("nonLocked", userDetails.isAccountNonLocked());
+                clientObject.addProperty("nonExpired", userDetails.isAccountNonExpired());
+                if (null!=userDetails.getUsername()) {
+                    clientObject.addProperty("username", userDetails.getUsername());
+                }
             }
-            obj.add("accountDetails", detailsArr);
+            obj.add("accountDetails", detailsMap);
         }
     }
 
