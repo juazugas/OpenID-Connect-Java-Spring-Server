@@ -30,6 +30,7 @@ import javax.servlet.http.HttpSession;
 import org.mitre.openid.connect.filter.AuthorizationRequestFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -43,6 +44,11 @@ import org.springframework.stereotype.Component;
  */
 @Component("authenticationTimeStamper")
 public class AuthenticationTimeStamper extends SavedRequestAwareAuthenticationSuccessHandler {
+    
+    
+    public AuthenticationTimeStamper(@Value("${openid.server.login.defaultUrl:/admin/index}") String defaultTargetUrl) {
+        setDefaultTargetUrl(defaultTargetUrl);
+    }
 
 	/**
 	 * Logger for this class
