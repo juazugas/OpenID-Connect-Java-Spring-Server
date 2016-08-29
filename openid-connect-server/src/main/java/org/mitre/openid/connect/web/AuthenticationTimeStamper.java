@@ -22,6 +22,7 @@ package org.mitre.openid.connect.web;
 import java.io.IOException;
 import java.util.Date;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,6 +35,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 /**
  * This class sets a timestamp on the current HttpSession
@@ -45,9 +47,26 @@ import org.springframework.stereotype.Component;
 @Component("authenticationTimeStamper")
 public class AuthenticationTimeStamper extends SavedRequestAwareAuthenticationSuccessHandler {
     
+    @Value("${openid.server.login.defaultUrl:/admin/index}") 
+    private String defaultRedirectUrl;
+    
+    /**
+     * Dfault constructor
+     */
+    public AuthenticationTimeStamper() {
+        // dfault constructor needed by spring framework
+    }
     
     public AuthenticationTimeStamper(@Value("${openid.server.login.defaultUrl:/admin/index}") String defaultTargetUrl) {
         setDefaultTargetUrl(defaultTargetUrl);
+    }
+    
+    @PostConstruct
+    public void afterPropertiesSet () { 
+        if (!StringUtils.isEmpty(defaultRedirectUrl) && defaultRedirectUrl.startsWith("/") &&
+            !super.getDefaultTargetUrl().equalsIgnoreCase(defaultRedirectUrl)) {
+            super.setDefaultTargetUrl(defaultRedirectUrl);
+        }
     }
 
 	/**
