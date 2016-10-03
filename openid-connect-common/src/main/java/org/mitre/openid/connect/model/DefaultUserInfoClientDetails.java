@@ -3,13 +3,10 @@ package org.mitre.openid.connect.model;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
@@ -35,13 +32,18 @@ public class DefaultUserInfoClientDetails implements UserInfoClientDetails {
     
     private static final long serialVersionUID = 1L;
     
-    private long id;
+    private Long id;
     
-    private long idUserInfo;
+    private Long idUserInfo;
     private ClientDetailsEntity client;
     
     private boolean enabled;
     
+    /**
+     * 
+     */
+    public DefaultUserInfoClientDetails() {
+    }
 
     /**
      * Retrieves the id 
@@ -51,7 +53,7 @@ public class DefaultUserInfoClientDetails implements UserInfoClientDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    public long getId() {
+    public Long getId() {
         return id;
     }
     
@@ -60,7 +62,7 @@ public class DefaultUserInfoClientDetails implements UserInfoClientDetails {
      * 
      * @param id
      */
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
     
@@ -74,11 +76,11 @@ public class DefaultUserInfoClientDetails implements UserInfoClientDetails {
         inverseJoinColumns = { @JoinColumn(name="id", referencedColumnName="id_user_info") }
     )*/
     @Column(name="id_user_info")
-    public long getIdUserInfo() {
+    public Long getIdUserInfo() {
         return idUserInfo;
     }
     
-    public void setIdUserInfo(long id) {
+    public void setIdUserInfo(Long id) {
         this.idUserInfo = id;
     }
 

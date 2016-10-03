@@ -36,12 +36,12 @@ public class DefaultUserInfoClientAuthority implements UserInfoClientAuthority {
     /**
      * Identificador de la tupla.
      */
-    private long id;
+    private Long id;
     
     /**
      * Identificador del usuario de la propiedad.
      */
-    private long idUserInfo;
+    private Long idUserInfo;
     
     /**
      * Cliente asociado a la propiedad.
@@ -53,6 +53,14 @@ public class DefaultUserInfoClientAuthority implements UserInfoClientAuthority {
      */
     private String authority;
     
+    
+    
+    /**
+     * 
+     */
+    public DefaultUserInfoClientAuthority() {
+    }
+
     /**
      * Retrieves the id 
      * 
@@ -61,7 +69,7 @@ public class DefaultUserInfoClientAuthority implements UserInfoClientAuthority {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    public long getId() {
+    public Long getId() {
         return id;
     }
     
@@ -70,7 +78,7 @@ public class DefaultUserInfoClientAuthority implements UserInfoClientAuthority {
      * 
      * @param id
      */
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -83,7 +91,7 @@ public class DefaultUserInfoClientAuthority implements UserInfoClientAuthority {
         inverseJoinColumns = { @JoinColumn(name="id", referencedColumnName="id_user_info") }
     )*/
     @Column(name="id_user_info")
-    public long getIdUserInfo() {
+    public Long getIdUserInfo() {
         return idUserInfo;
     }
     
@@ -91,7 +99,7 @@ public class DefaultUserInfoClientAuthority implements UserInfoClientAuthority {
      * Sets the user_info identifier.
      * @param id
      */
-    public void setIdUserInfo(long id) {
+    public void setIdUserInfo(Long id) {
         this.idUserInfo = id;
     }
 

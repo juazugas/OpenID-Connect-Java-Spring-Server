@@ -16,8 +16,6 @@
  *******************************************************************************/
 package org.mitre.openid.connect.model;
 
-import java.io.Serializable;
-
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -52,6 +50,7 @@ public class DefaultAddress implements Address {
 	 * @param address
 	 */
 	public DefaultAddress(Address address) {
+	    setId(address.getId());
 		setFormatted(address.getFormatted());
 		setStreetAddress(address.getStreetAddress());
 		setLocality(address.getLocality());

@@ -19,26 +19,19 @@ package org.mitre.openid.connect.model;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Convert;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -92,8 +85,15 @@ public class DefaultUserInfo implements UserInfo {
 	private Set<UserInfoClientAuthority> accountAuthorities;
 	private transient JsonObject src; // source JSON if this is loaded remotely
 
+	
+	
 
 	/**
+     * 
+     */
+    public DefaultUserInfo() {
+    }
+    /**
 	 * @return the id
 	 */
 	@Id
@@ -566,11 +566,11 @@ public class DefaultUserInfo implements UserInfo {
 				obj.add("address", addr);
 			}
 			
-			setAccountDetails(obj);
+			setJsonAccountDetails(obj);
 			
-			setAccountProperties(obj);
+			setJsonAccountProperties(obj);
 			
-			setAccountAuthorities(obj);
+			setJsonAccountAuthorities(obj);
 
 			return obj;
 		} else {
@@ -583,7 +583,7 @@ public class DefaultUserInfo implements UserInfo {
      * Maps the account properties to Json
      * @param obj
      */
-    private void setAccountProperties(JsonObject obj) {
+    private void setJsonAccountProperties(JsonObject obj) {
         if (this.getAccountProperties() != null) {
             
             JsonObject propertiesMap = new JsonObject();
@@ -606,7 +606,7 @@ public class DefaultUserInfo implements UserInfo {
      * Maps the account properties to Json
      * @param obj
      */
-    private void setAccountAuthorities(JsonObject obj) {
+    private void setJsonAccountAuthorities(JsonObject obj) {
         if (this.getAccountAuthorities() != null) {
             
             JsonObject authoritiesMap = new JsonObject();
@@ -629,7 +629,7 @@ public class DefaultUserInfo implements UserInfo {
      * Maps the account details to Json 
      * @param obj
      */
-    private void setAccountDetails(JsonObject obj) {
+    private void setJsonAccountDetails(JsonObject obj) {
         if (this.getAccountDetails() != null) {
             
             JsonObject detailsMap = new JsonObject();
