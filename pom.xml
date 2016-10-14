@@ -45,12 +45,15 @@
 		<module>uma-server-webapp</module>
 	</modules>
 
+  <!--
 	<scm>
 		<connection>scm:git:https://github.com/mitreid-connect/OpenID-Connect-Java-Spring-Server.git</connection>
 		<developerConnection>scm:git:git@github.com:mitreid-connect/OpenID-Connect-Java-Spring-Server.git</developerConnection>
 		<url>https://github.com/mitreid-connect/OpenID-Connect-Java-Spring-Server.git</url>
 		<tag>HEAD</tag>
 	</scm>
+    -->
+
 
 	<developers>
 		<developer>
@@ -74,6 +77,23 @@
 		<spring.security.version>3.2.5.RELEASE</spring.security.version>
 		<org.slf4j-version>1.7.12</org.slf4j-version>
 	</properties>
+	
+    <!-- Artifactory Repository Manager -->
+	<distributionManagement>
+	    <repository>
+	        <id>artifactory.releases</id>
+	        <name>Artifactory Releases</name>
+	        <url>${repo.lib.server}/ext-release-local</url>
+	        <uniqueVersion>true</uniqueVersion>
+	    </repository>
+	    <snapshotRepository>
+	        <id>artifactory.ext-snapshots</id>
+	        <name>Artifactory Snapshots</name>
+	        <url>${repo.lib.server}/ext-snapshot-local</url>
+	        <uniqueVersion>true</uniqueVersion>
+	    </snapshotRepository>
+    </distributionManagement> 
+	
 	<description>A reference implementation of OpenID Connect (http://openid.net/connect/), OAuth 2.0, and UMA built on top of Java, Spring, and Spring Security. The project contains a fully functioning server, client, and utility library.</description>
 	<url>https://github.com/mitreid-connect</url>
 	<build>
