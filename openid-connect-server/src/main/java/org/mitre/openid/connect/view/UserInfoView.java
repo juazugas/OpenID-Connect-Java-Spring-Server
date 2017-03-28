@@ -18,6 +18,7 @@ package org.mitre.openid.connect.view;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -60,6 +61,9 @@ public class UserInfoView extends AbstractView {
 	 * Logger for this class
 	 */
 	private static final Logger logger = LoggerFactory.getLogger(UserInfoView.class);
+    
+	private static final String CHARSET_UTF_8 = "UTF-8";
+	private static final String APPLICATION_JSON_VALUE = MediaType.APPLICATION_JSON_VALUE + ";charset=" + CHARSET_UTF_8;
 
 	@Autowired
 	private ScopeClaimTranslationService translator;
@@ -98,7 +102,8 @@ public class UserInfoView extends AbstractView {
 
 		Set<String> scope = (Set<String>) model.get(SCOPE);
 
-		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+		response.setContentType(APPLICATION_JSON_VALUE);
+		response.setCharacterEncoding(CHARSET_UTF_8);
 
 
 		JsonObject authorizedClaims = null;
