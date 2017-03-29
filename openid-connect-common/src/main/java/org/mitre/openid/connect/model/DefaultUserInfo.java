@@ -83,9 +83,8 @@ public class DefaultUserInfo implements UserInfo {
 	private Set<UserInfoClientDetails> accountDetails;
 	private Set<UserInfoClientProperty> accountProperties;
 	private Set<UserInfoClientAuthority> accountAuthorities;
+	private Set<UserInfoRealmProperty> accountRealmProperties;
 	private transient JsonObject src; // source JSON if this is loaded remotely
-
-	
 	
 
 	/**
@@ -458,7 +457,7 @@ public class DefaultUserInfo implements UserInfo {
         } else {
             accountDetails.clear();
         }
-        if (null!=details && details.size()>0) {
+        if (null!=details && !details.isEmpty()) {
             accountDetails.addAll(details);
         }
     }
@@ -487,7 +486,7 @@ public class DefaultUserInfo implements UserInfo {
         } else {
             accountProperties.clear();
         }
-        if (null!=properties && properties.size()>0) {
+        if (null!=properties && !properties.isEmpty()) {
             accountProperties.addAll(properties);
         }
 	}
@@ -516,9 +515,28 @@ public class DefaultUserInfo implements UserInfo {
         } else {
             accountAuthorities.clear();
         }
-        if (null!=authorities && authorities.size()>0) {
+        if (null!=authorities && !authorities.isEmpty()) {
             accountAuthorities.addAll(authorities);
         }
+	}
+	
+	@Transient
+	@Override
+	public Set<UserInfoRealmProperty> getAccountRealmProperties() {
+	    return accountRealmProperties;
+	}
+	
+	@Override
+	public void setAccountRealmProperties(Set<UserInfoRealmProperty> properties) {
+	    if (null==accountRealmProperties) {
+	        accountRealmProperties = new HashSet<>();
+	    } else {
+	        accountRealmProperties.clear();
+	    }
+	    if (null!=properties && !properties.isEmpty()) {
+	        accountRealmProperties.addAll(properties);
+	    }
+	    
 	}
 
     /**
@@ -571,6 +589,8 @@ public class DefaultUserInfo implements UserInfo {
 			setJsonAccountProperties(obj);
 			
 			setJsonAccountAuthorities(obj);
+			
+			setJsonAccountRealmProperties(obj);
 
 			return obj;
 		} else {
@@ -599,6 +619,29 @@ public class DefaultUserInfo implements UserInfo {
                 clientObject.addProperty(userProperties.getProperty(), userProperties.getValue());
             }
             obj.add("accountProperties", propertiesMap);
+        }
+    }
+    
+    /**
+     * Maps the account properties by realm to Json
+     * @param obj
+     */
+    private void setJsonAccountRealmProperties(JsonObject obj) {
+        if (this.getAccountRealmProperties() != null) {
+            
+            JsonObject propertiesMap = new JsonObject();
+            for (UserInfoRealmProperty userProperties : this.getAccountRealmProperties()) {
+                String realmName = userProperties.getUserInfoRealm().getRealm().getName();
+                JsonObject realmObject;
+                if (propertiesMap.has(realmName)) {
+                    realmObject = (JsonObject) propertiesMap.get(realmName); 
+                } else {
+                    realmObject = new JsonObject();
+                    propertiesMap.add(realmName, realmObject);
+                }
+                realmObject.addProperty(userProperties.getProperty(), userProperties.getValue());
+            }
+            obj.add("accountRealms", propertiesMap);
         }
     }
     

@@ -278,4 +278,17 @@ public interface UserInfo extends Serializable {
 	 */
 	public void setAccountAuthorities(Set<UserInfoClientAuthority> authorities);
 	
+	/**
+	 * The user_info properties by realm.
+	 * 
+	 */
+	public Set<UserInfoRealmProperty> getAccountRealmProperties();
+	
+	/**
+	 * Sets the user_info properties by realms.
+	 * 
+	 * @param properties the property list
+	 */
+	public void setAccountRealmProperties(Set<UserInfoRealmProperty> properties);
+	
 }
