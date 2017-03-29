@@ -23,14 +23,4 @@ public interface UserInfoRealmPropertyRepository {
      */
     Set<UserInfoRealmProperty> getByUserInfoAndRealm(UserInfo userInfo, RealmDetailsEntity realm);
 
-    /**
-     * Retrieves all the properties of the user_info.
-     * 
-     * @param userInfo
-     *            the user_info
-     * @return 
-     *            the user_info properties in all realms
-     */
-    Set<UserInfoRealmProperty> getByUserInfoSortByRealm(UserInfo userInfo);
-
 }

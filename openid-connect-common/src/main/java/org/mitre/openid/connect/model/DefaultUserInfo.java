@@ -83,7 +83,7 @@ public class DefaultUserInfo implements UserInfo {
 	private Set<UserInfoClientDetails> accountDetails;
 	private Set<UserInfoClientProperty> accountProperties;
 	private Set<UserInfoClientAuthority> accountAuthorities;
-	private Set<UserInfoRealmProperty> accountRealmProperties;
+	private Set<UserInfoRealmDetails> accountRealmDetails;
 	private transient JsonObject src; // source JSON if this is loaded remotely
 	
 
@@ -522,19 +522,19 @@ public class DefaultUserInfo implements UserInfo {
 	
 	@Transient
 	@Override
-	public Set<UserInfoRealmProperty> getAccountRealmProperties() {
-	    return accountRealmProperties;
+	public Set<UserInfoRealmDetails> getAccountRealms() {
+	    return accountRealmDetails;
 	}
 	
 	@Override
-	public void setAccountRealmProperties(Set<UserInfoRealmProperty> properties) {
-	    if (null==accountRealmProperties) {
-	        accountRealmProperties = new HashSet<>();
+	public void setAccountRealms(Set<UserInfoRealmDetails> realms) {
+	    if (null==accountRealmDetails) {
+	        accountRealmDetails = new HashSet<>();
 	    } else {
-	        accountRealmProperties.clear();
+	        accountRealmDetails.clear();
 	    }
-	    if (null!=properties && !properties.isEmpty()) {
-	        accountRealmProperties.addAll(properties);
+	    if (null!=realms && !realms.isEmpty()) {
+	        accountRealmDetails.addAll(realms);
 	    }
 	    
 	}
@@ -590,7 +590,7 @@ public class DefaultUserInfo implements UserInfo {
 			
 			setJsonAccountAuthorities(obj);
 			
-			setJsonAccountRealmProperties(obj);
+			setJsonAccountRealms(obj);
 
 			return obj;
 		} else {
@@ -600,7 +600,8 @@ public class DefaultUserInfo implements UserInfo {
 	}
     
     /**
-     * Maps the account properties to Json
+     * Maps the account properties to Json.
+     * 
      * @param obj
      */
     private void setJsonAccountProperties(JsonObject obj) {
@@ -623,25 +624,44 @@ public class DefaultUserInfo implements UserInfo {
     }
     
     /**
-     * Maps the account properties by realm to Json
+     * Maps the account realms to Json.
      * @param obj
      */
-    private void setJsonAccountRealmProperties(JsonObject obj) {
-        if (this.getAccountRealmProperties() != null) {
+    private void setJsonAccountRealms(JsonObject obj) {
+        if (this.getAccountRealms() != null) {
             
             JsonObject propertiesMap = new JsonObject();
-            for (UserInfoRealmProperty userProperties : this.getAccountRealmProperties()) {
-                String realmName = userProperties.getUserInfoRealm().getRealm().getName();
+            for (UserInfoRealmDetails userRealm : this.getAccountRealms()) {
+                String realmName = userRealm.getRealm().getName();
                 JsonObject realmObject;
+                JsonObject realmProperties;
                 if (propertiesMap.has(realmName)) {
                     realmObject = (JsonObject) propertiesMap.get(realmName); 
+                    realmProperties = (JsonObject) realmObject.get("properties");
                 } else {
                     realmObject = new JsonObject();
                     propertiesMap.add(realmName, realmObject);
+                    Boolean isAdmin = userRealm.isAdmin();
+                    realmObject.addProperty("isAdmin", isAdmin);
+                    realmProperties = new JsonObject();
+                    realmObject.add("properties", realmProperties);
                 }
-                realmObject.addProperty(userProperties.getProperty(), userProperties.getValue());
+                setJsonAccountRealmProperties(userRealm, realmProperties);
             }
             obj.add("accountRealms", propertiesMap);
+        }
+    }
+    
+    /**
+     * Maps the account realm properties by realm to Json.
+     * @param userRealm
+     * @param properties
+     */
+    private void setJsonAccountRealmProperties(UserInfoRealmDetails userRealm, JsonObject properties) {
+        if (null!=userRealm && null!=userRealm.getRealmProperties() && null!=properties) {
+            for (UserInfoRealmProperty property : userRealm.getRealmProperties()) {
+                properties.addProperty(property.getProperty(), property.getValue());
+            }
         }
     }
     

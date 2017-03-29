@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
 
 /**
  * Represents the details of a realm.
@@ -43,10 +44,7 @@ public class RealmDetailsEntity implements RealmDetails {
     private String description;
     private Date createdDt;
     private Date deleteDt;
-
-    @Column(name = "disable_dt")
     private Date disableDt;
-
     private String adminEmail;
 
     /**
@@ -162,6 +160,7 @@ public class RealmDetailsEntity implements RealmDetails {
      * @see org.mitre.openid.connect.model.RealmDetails#getCreatedDt()
      */
     @Basic
+	@Temporal(javax.persistence.TemporalType.TIMESTAMP)
     @Column(name = "created_dt")
     @Override
     public Date getCreatedDt() {
@@ -184,6 +183,7 @@ public class RealmDetailsEntity implements RealmDetails {
      * @see org.mitre.openid.connect.model.RealmDetails#getDeleteDt()
      */
     @Basic
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     @Column(name = "delete_dt")
     @Override
     public Date getDeleteDt() {
@@ -227,11 +227,11 @@ public class RealmDetailsEntity implements RealmDetails {
      * @see org.mitre.openid.connect.model.RealmDetails#getDisableDt()
      */
     @Basic
+	@Temporal(javax.persistence.TemporalType.TIMESTAMP)
     @Column(name = "disable_dt")
     @Override
-    public String getDisableDt() {
-        // TODO Auto-generated method stub
-        return null;
+    public Date getDisableDt() {
+        return this.disableDt;
     }
 
     /**

@@ -21,13 +21,14 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "user_realms_property")
 @NamedQueries({ 
-    @NamedQuery(name = DefaultUserInfoRealmProperty.QUERY_ALL_BY_USER_INFO,
-                query = "SELECT u FROM DefaultUserInfoRealmProperty u WHERE u.userInfoRealm.user_info_id = :" +
-                        DefaultUserInfoRealmProperty.PARAM_USERINFO + " ORDER BY u.userInfoRealm.id, u.id") })
+    @NamedQuery(name = DefaultUserInfoRealmProperty.QUERY_BY_USER_INFO_AND_REALM,
+                query = "SELECT u FROM DefaultUserInfoRealmProperty u WHERE u.userInfoRealm.idUserInfo = :" +
+                        DefaultUserInfoRealmProperty.PARAM_USERINFO + " AND u.userInfoRealm.realm.id = :" + DefaultUserInfoRealmProperty.PARAM_REALM) })
 public class DefaultUserInfoRealmProperty implements UserInfoRealmProperty {
 
-    public static final String QUERY_ALL_BY_USER_INFO = "DefaultUserInfoRealmProperty.QueryAllByUserInfo";
+    public static final String QUERY_BY_USER_INFO_AND_REALM = "DefaultUserInfoRealmProperty.QueryAllByUserInfo";
     public static final String PARAM_USERINFO = "userInfoId";
+    public static final String PARAM_REALM    = "realmId";
 
     /**
      * Computed serial version Id.
@@ -63,7 +64,7 @@ public class DefaultUserInfoRealmProperty implements UserInfoRealmProperty {
     @OneToOne
     @JoinColumn(name = "user_realms_id", referencedColumnName = "id")
     @Override
-    public UserInfoRealmDetails getUserInfoRealm() {
+    public DefaultUserInfoRealmDetails getUserInfoRealm() {
         return userInfoRealm;
     }
 
@@ -75,6 +76,8 @@ public class DefaultUserInfoRealmProperty implements UserInfoRealmProperty {
     public void setUserInfoRealm(DefaultUserInfoRealmDetails userInfoRealm) {
         this.userInfoRealm = userInfoRealm;
     }
+    
+    
 
     /*
      * (non-Javadoc)

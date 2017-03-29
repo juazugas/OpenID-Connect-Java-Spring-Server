@@ -64,6 +64,6 @@ public interface RealmDetails extends Serializable {
      * 
      * @return the date of disable.
      */
-    String getDisableDt();
+    Date getDisableDt();
 
 }

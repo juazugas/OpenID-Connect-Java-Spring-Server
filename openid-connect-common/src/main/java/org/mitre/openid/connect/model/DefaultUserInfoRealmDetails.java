@@ -1,5 +1,7 @@
 package org.mitre.openid.connect.model;
 
+import java.util.Set;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +13,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 
 /**
@@ -18,7 +21,7 @@ import javax.persistence.Table;
  *
  */
 @Entity
-@Table(name="user_realm")
+@Table(name="user_realms")
 @NamedQueries({
     @NamedQuery(name  = DefaultUserInfoRealmDetails.QUERY_ALL_BY_USERINFO, 
                 query = "SELECT c FROM DefaultUserInfoRealmDetails c WHERE c.idUserInfo = :" + DefaultUserInfoRealmDetails.PARAM_USERINFO),
@@ -37,6 +40,7 @@ public class DefaultUserInfoRealmDetails implements UserInfoRealmDetails {
     public Long id;
     private Long idUserInfo;
     private RealmDetailsEntity realm;
+    private Set<UserInfoRealmProperty> properties;
     
     /**
      * determines if the user_info is admin in the realm. 
@@ -90,7 +94,7 @@ public class DefaultUserInfoRealmDetails implements UserInfoRealmDetails {
     @OneToOne
     @JoinColumn(name="realm_id", referencedColumnName= "id")
     @Override
-    public RealmDetails getRealm() {
+    public RealmDetailsEntity getRealm() {
         return this.realm;
     }
     
@@ -123,5 +127,25 @@ public class DefaultUserInfoRealmDetails implements UserInfoRealmDetails {
     public void setAdmin(boolean admin) {
         this.admin = admin;
     }
+
+    
+    /**
+     * @return the properties
+     */
+    @Transient
+    @Override
+    public Set<UserInfoRealmProperty> getRealmProperties() {
+        return properties;
+    }
+
+    
+    /**
+     * @param properties the properties to set
+     */
+    public void setRealmProperties(Set<UserInfoRealmProperty> properties) {
+        this.properties = properties;
+    }
+    
+    
     
 }
