@@ -23,11 +23,17 @@ import java.util.Set;
 import org.mitre.oauth2.model.ClientDetailsEntity;
 import org.mitre.oauth2.model.ClientDetailsEntity.SubjectType;
 import org.mitre.oauth2.service.ClientDetailsEntityService;
+import org.mitre.openid.connect.model.DefaultUserInfoRealmDetails;
+import org.mitre.openid.connect.model.RealmDetailsEntity;
 import org.mitre.openid.connect.model.UserInfo;
 import org.mitre.openid.connect.model.UserInfoClientDetails;
+import org.mitre.openid.connect.model.UserInfoRealmDetails;
+import org.mitre.openid.connect.model.UserInfoRealmProperty;
 import org.mitre.openid.connect.repository.UserInfoClientAuthorityRepository;
 import org.mitre.openid.connect.repository.UserInfoClientDetailsRepository;
 import org.mitre.openid.connect.repository.UserInfoClientPropertyRepository;
+import org.mitre.openid.connect.repository.UserInfoRealmPropertyRepository;
+import org.mitre.openid.connect.repository.UserInfoRealmRepository;
 import org.mitre.openid.connect.repository.UserInfoRepository;
 import org.mitre.openid.connect.service.PairwiseIdentiferService;
 import org.mitre.openid.connect.service.UserInfoService;
@@ -54,6 +60,12 @@ public class DefaultUserInfoService implements UserInfoService {
 	
 	@Autowired
 	private UserInfoClientAuthorityRepository userInfoAuthorityRepository;
+	
+	@Autowired
+	private UserInfoRealmRepository userInfoRealmRepository;
+	
+	@Autowired
+	private UserInfoRealmPropertyRepository userInfoRealmPropertyRepository;
 
 	@Autowired
 	private ClientDetailsEntityService clientService;
@@ -65,6 +77,7 @@ public class DefaultUserInfoService implements UserInfoService {
 	public UserInfo getByUsername(String username) {
 	    UserInfo userInfo = userInfoRepository.getByUsername(username);
 	    addUserInfoClientRelations(userInfo);
+	    addUserInfoRealmRelations(userInfo);
 	    
 		return userInfo;
 	}
@@ -108,6 +121,31 @@ public class DefaultUserInfoService implements UserInfoService {
         userInfo.setAccountDetails(userInfoDetailsRepository.getByUserInfo(userInfo));
         userInfo.setAccountProperties(userInfoPropertyRepository.getByUserInfo(userInfo));
         userInfo.setAccountAuthorities(userInfoAuthorityRepository.getByUserInfo(userInfo));
+        
+        
     }
+    
+    /**
+     * Adds the relations between realm and user_info.
+     * @param userInfo
+     */
+    private void addUserInfoRealmRelations(UserInfo userInfo) {
+        if (null==userInfo) {
+            return;
+        }
+        
+        Set<UserInfoRealmDetails> realms = userInfoRealmRepository.getByUserInfo(userInfo);
+        if (null!=realms) {
+            for (UserInfoRealmDetails userRealm : realms) {
+                if (userRealm instanceof DefaultUserInfoRealmDetails) {
+                    DefaultUserInfoRealmDetails defaultRealmDetails = DefaultUserInfoRealmDetails.class.cast(userRealm);
+                    defaultRealmDetails.setRealmProperties(userInfoRealmPropertyRepository.getByUserInfoAndRealm(userInfo, userRealm.getRealm()));
+                }
+            }
+        }
+        userInfo.setAccountRealms(realms);
+    }
+
+    
 
 }
