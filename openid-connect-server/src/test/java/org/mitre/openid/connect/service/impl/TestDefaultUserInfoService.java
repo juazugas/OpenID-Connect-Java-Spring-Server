@@ -19,6 +19,9 @@
  */
 package org.mitre.openid.connect.service.impl;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,6 +30,11 @@ import org.mitre.oauth2.model.ClientDetailsEntity.SubjectType;
 import org.mitre.oauth2.service.ClientDetailsEntityService;
 import org.mitre.openid.connect.model.DefaultUserInfo;
 import org.mitre.openid.connect.model.UserInfo;
+import org.mitre.openid.connect.repository.UserInfoClientAuthorityRepository;
+import org.mitre.openid.connect.repository.UserInfoClientDetailsRepository;
+import org.mitre.openid.connect.repository.UserInfoClientPropertyRepository;
+import org.mitre.openid.connect.repository.UserInfoRealmPropertyRepository;
+import org.mitre.openid.connect.repository.UserInfoRealmRepository;
 import org.mitre.openid.connect.repository.UserInfoRepository;
 import org.mitre.openid.connect.service.PairwiseIdentiferService;
 import org.mockito.InjectMocks;
@@ -36,9 +44,6 @@ import org.mockito.Mockito;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.mockito.stubbing.Answer;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 
 /**
  * @author jricher
@@ -51,6 +56,21 @@ public class TestDefaultUserInfoService {
 
 	@Mock
 	private UserInfoRepository userInfoRepository;
+
+	@Mock
+    private UserInfoClientDetailsRepository userInfoDetailsRepository;
+
+    @Mock
+    private UserInfoClientPropertyRepository userInfoPropertyRepository;
+    
+    @Mock
+    private UserInfoClientAuthorityRepository userInfoAuthorityRepository;
+    
+    @Mock
+    private UserInfoRealmRepository userInfoRealmRepository;
+    
+    @Mock
+    private UserInfoRealmPropertyRepository userInfoRealmPropertyRepository;
 
 	@Mock
 	private ClientDetailsEntityService clientDetailsEntityService;
@@ -135,7 +155,6 @@ public class TestDefaultUserInfoService {
 		pairwiseClient4 = new ClientDetailsEntity();
 		pairwiseClient4.setClientId(pairwiseClientId4);
 		pairwiseClient4.setSubjectType(SubjectType.PAIRWISE);
-
 
 
 

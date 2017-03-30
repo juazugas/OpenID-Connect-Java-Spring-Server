@@ -16,19 +16,14 @@
  *******************************************************************************/
 package org.mitre.openid.connect.service.impl;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.mitre.oauth2.model.ClientDetailsEntity;
 import org.mitre.oauth2.model.ClientDetailsEntity.SubjectType;
 import org.mitre.oauth2.service.ClientDetailsEntityService;
 import org.mitre.openid.connect.model.DefaultUserInfoRealmDetails;
-import org.mitre.openid.connect.model.RealmDetailsEntity;
 import org.mitre.openid.connect.model.UserInfo;
-import org.mitre.openid.connect.model.UserInfoClientDetails;
 import org.mitre.openid.connect.model.UserInfoRealmDetails;
-import org.mitre.openid.connect.model.UserInfoRealmProperty;
 import org.mitre.openid.connect.repository.UserInfoClientAuthorityRepository;
 import org.mitre.openid.connect.repository.UserInfoClientDetailsRepository;
 import org.mitre.openid.connect.repository.UserInfoClientPropertyRepository;
