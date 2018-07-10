@@ -17,14 +17,12 @@
 package org.mitre.openid.connect.service.impl;
 
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.mitre.openid.connect.service.ScopeClaimTranslationService;
 import org.springframework.stereotype.Service;
 
 import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Maps;
 import com.google.common.collect.SetMultimap;
 
 /**
@@ -71,6 +69,7 @@ public class DefaultScopeClaimTranslationService implements ScopeClaimTranslatio
 		scopesToClaims.put("properties", "accountProperties");
 		scopesToClaims.put("authorities", "accountAuthorities");
 		scopesToClaims.put("realms", "accountRealms");
+        scopesToClaims.put("edelivery", "edeliveryProperties");
 	}
 
 	/* (non-Javadoc)

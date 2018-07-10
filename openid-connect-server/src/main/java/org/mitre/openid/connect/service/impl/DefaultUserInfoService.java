@@ -16,14 +16,18 @@
  *******************************************************************************/
 package org.mitre.openid.connect.service.impl;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.mitre.oauth2.model.ClientDetailsEntity;
 import org.mitre.oauth2.model.ClientDetailsEntity.SubjectType;
 import org.mitre.oauth2.service.ClientDetailsEntityService;
 import org.mitre.openid.connect.model.DefaultUserInfoRealmDetails;
+import org.mitre.openid.connect.model.UserDetailsEntity;
 import org.mitre.openid.connect.model.UserInfo;
 import org.mitre.openid.connect.model.UserInfoRealmDetails;
+import org.mitre.openid.connect.repository.UserDetailsRepository;
 import org.mitre.openid.connect.repository.UserInfoClientAuthorityRepository;
 import org.mitre.openid.connect.repository.UserInfoClientDetailsRepository;
 import org.mitre.openid.connect.repository.UserInfoClientPropertyRepository;
@@ -63,6 +67,9 @@ public class DefaultUserInfoService implements UserInfoService {
 	private UserInfoRealmPropertyRepository userInfoRealmPropertyRepository;
 
 	@Autowired
+    private UserDetailsRepository userDetailsRepository;
+
+    @Autowired
 	private ClientDetailsEntityService clientService;
 
 	@Autowired
@@ -73,6 +80,7 @@ public class DefaultUserInfoService implements UserInfoService {
 	    UserInfo userInfo = userInfoRepository.getByUsername(username);
 	    addUserInfoClientRelations(userInfo);
 	    addUserInfoRealmRelations(userInfo);
+        addUserDetailsProperties(userInfo);
 	    
 		return userInfo;
 	}
@@ -141,6 +149,23 @@ public class DefaultUserInfoService implements UserInfoService {
         userInfo.setAccountRealms(realms);
     }
 
-    
+    /**
+     * Adds the user properties to userInfo object.
+     * 
+     * @param userInfo
+     */
+    private void addUserDetailsProperties (UserInfo userInfo) {
+        if (null == userInfo) {
+            return;
+        }
+
+        Map<String, String> properties = new HashMap<>();
+        UserDetailsEntity user = userDetailsRepository.getByUsername(userInfo.getPreferredUsername());
+        if (null != user && user.isEnrollment() && null != user.getUserProperties() && user.getUserProperties()
+                .isEmpty()) {
+            properties.putAll(user.getUserProperties());
+        }
+        userInfo.setUserProperties(properties);
+    }
 
 }
