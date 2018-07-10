@@ -1,7 +1,6 @@
 package org.mitre.openid.connect.model;
 
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 import javax.persistence.Basic;
@@ -23,7 +22,7 @@ import javax.persistence.TemporalType;
 
 /**
  * User entity from table `user`
- * 
+ *
  * @author jzuriaga
  *
  */
@@ -51,12 +50,12 @@ public class UserDetailsEntity implements UserDetails {
     private String username;
     private boolean enabled;
     private boolean enrollment;
-    private Date createdDt;
+	private Date createDt;
     private Map<String, String> userProperties;
-    
+
     /**
      * gets the user `id`
-     * 
+     *
      * @return the long with the `user_id`
      */
     @Id
@@ -65,10 +64,10 @@ public class UserDetailsEntity implements UserDetails {
     public Long getId() {
 		return id;
 	}
-    
+
     /**
      * Sets the user `id`
-     * 
+     *
      * @param id
      */
     public void setId(Long id) {
@@ -79,15 +78,15 @@ public class UserDetailsEntity implements UserDetails {
 	 * @see org.mitre.openid.connect.model.UserDetails#getUsername()
 	 */
     @Basic
-    @Column(name = "name")
+	@Column(name = "username")
 	@Override
 	public String getUsername() {
 		return this.username;
 	}
-    
+
     /**
      * Sets the user name.
-     * 
+     *
      * @param username string with the username.
      */
     public void setUsername(String username) {
@@ -103,10 +102,10 @@ public class UserDetailsEntity implements UserDetails {
 	public boolean isEnabled() {
     	return this.enabled;
 	}
-    
+
     /**
      * sets the enabled flag of the user.
-     * 
+     *
      * @param enabled
      */
     public void setEnabled(boolean enabled) {
@@ -122,10 +121,10 @@ public class UserDetailsEntity implements UserDetails {
 	public boolean isEnrollment() {
 		return this.enrollment;
 	}
-    
+
     /**
      * Sets the enrollment property.
-     * 
+     *
      * @param enrollment
      */
     public void setEnrollment(boolean enrollment) {
@@ -143,10 +142,10 @@ public class UserDetailsEntity implements UserDetails {
 	public Map<String, String> getUserProperties() {
 		return this.userProperties;
 	}
-    
+
     /**
-     * Sets the user properties. 
-     * 
+     * Sets the user properties.
+     *
      * @param userProperties
      */
     public void setUserProperties(Map<String, String> userProperties) {
@@ -155,25 +154,25 @@ public class UserDetailsEntity implements UserDetails {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.mitre.openid.connect.model.RealmDetails#getCreatedDt()
      */
     @Basic
 	@Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_dt")
-    public Date getCreatedDt() {
-        return this.createdDt;
+	@Column(name = "create_dt")
+	public Date getCreateDt () {
+		return this.createDt;
     }
 
     /**
      * Introduces de creation date.
-     * 
+     *
      * @param createdDt
      *            creation date
      */
-    public void setCreatedDt(Date createdDt) {
-        this.createdDt = createdDt;
+	public void setCreateDt (Date createdDt) {
+		this.createDt = createdDt;
     }
 
-    
+
 }

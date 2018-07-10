@@ -41,28 +41,28 @@ import org.springframework.stereotype.Service;
 
 /**
  * Implementation of the UserInfoService
- * 
+ *
  * @author Michael Joseph Walsh, jricher
- * 
+ *
  */
 @Service
 public class DefaultUserInfoService implements UserInfoService {
 
 	@Autowired
 	private UserInfoRepository userInfoRepository;
-	
+
 	@Autowired
 	private UserInfoClientDetailsRepository userInfoDetailsRepository;
 
 	@Autowired
 	private UserInfoClientPropertyRepository userInfoPropertyRepository;
-	
+
 	@Autowired
 	private UserInfoClientAuthorityRepository userInfoAuthorityRepository;
-	
+
 	@Autowired
 	private UserInfoRealmRepository userInfoRealmRepository;
-	
+
 	@Autowired
 	private UserInfoRealmPropertyRepository userInfoRealmPropertyRepository;
 
@@ -81,7 +81,7 @@ public class DefaultUserInfoService implements UserInfoService {
 	    addUserInfoClientRelations(userInfo);
 	    addUserInfoRealmRelations(userInfo);
         addUserDetailsProperties(userInfo);
-	    
+
 		return userInfo;
 	}
 
@@ -112,7 +112,7 @@ public class DefaultUserInfoService implements UserInfoService {
 	    addUserInfoClientRelations(userInfo);
 		return userInfo;
 	}
-	
+
 	/**
 	 * Adds the relations between client and user_info.
 	 * @param userInfo
@@ -124,10 +124,10 @@ public class DefaultUserInfoService implements UserInfoService {
         userInfo.setAccountDetails(userInfoDetailsRepository.getByUserInfo(userInfo));
         userInfo.setAccountProperties(userInfoPropertyRepository.getByUserInfo(userInfo));
         userInfo.setAccountAuthorities(userInfoAuthorityRepository.getByUserInfo(userInfo));
-        
-        
+
+
     }
-    
+
     /**
      * Adds the relations between realm and user_info.
      * @param userInfo
@@ -136,7 +136,7 @@ public class DefaultUserInfoService implements UserInfoService {
         if (null==userInfo) {
             return;
         }
-        
+
         Set<UserInfoRealmDetails> realms = userInfoRealmRepository.getByUserInfo(userInfo);
         if (null!=realms) {
             for (UserInfoRealmDetails userRealm : realms) {
@@ -151,7 +151,7 @@ public class DefaultUserInfoService implements UserInfoService {
 
     /**
      * Adds the user properties to userInfo object.
-     * 
+     *
      * @param userInfo
      */
     private void addUserDetailsProperties (UserInfo userInfo) {
@@ -161,7 +161,7 @@ public class DefaultUserInfoService implements UserInfoService {
 
         Map<String, String> properties = new HashMap<>();
         UserDetailsEntity user = userDetailsRepository.getByUsername(userInfo.getPreferredUsername());
-        if (null != user && user.isEnrollment() && null != user.getUserProperties() && user.getUserProperties()
+		if (null != user && user.isEnrollment() && null != user.getUserProperties() && !user.getUserProperties()
                 .isEmpty()) {
             properties.putAll(user.getUserProperties());
         }
