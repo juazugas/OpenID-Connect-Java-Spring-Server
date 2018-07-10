@@ -17,6 +17,7 @@
 package org.mitre.openid.connect.model;
 
 import java.io.Serializable;
+import java.util.Map;
 import java.util.Set;
 
 import com.google.gson.JsonObject;
@@ -290,5 +291,18 @@ public interface UserInfo extends Serializable {
 	 * @param realms the realm and property list
 	 */
 	public void setAccountRealms(Set<UserInfoRealmDetails> realms);
+	
+	/**
+	 * Gets the user edelivery properties.
+	 * @return the user entity.
+	 */
+	Map<String, String> getUserProperties();
+	
+	/**
+	 * Sets the user details.
+	 * 
+	 * @param properties
+	 */
+	void setUserProperties(Map<String, String> userDetails);
 	
 }

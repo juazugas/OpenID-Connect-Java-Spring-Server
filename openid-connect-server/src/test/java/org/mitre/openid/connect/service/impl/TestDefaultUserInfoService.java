@@ -30,6 +30,7 @@ import org.mitre.oauth2.model.ClientDetailsEntity.SubjectType;
 import org.mitre.oauth2.service.ClientDetailsEntityService;
 import org.mitre.openid.connect.model.DefaultUserInfo;
 import org.mitre.openid.connect.model.UserInfo;
+import org.mitre.openid.connect.repository.UserDetailsRepository;
 import org.mitre.openid.connect.repository.UserInfoClientAuthorityRepository;
 import org.mitre.openid.connect.repository.UserInfoClientDetailsRepository;
 import org.mitre.openid.connect.repository.UserInfoClientPropertyRepository;
@@ -71,6 +72,9 @@ public class TestDefaultUserInfoService {
     
     @Mock
     private UserInfoRealmPropertyRepository userInfoRealmPropertyRepository;
+
+    @Mock
+    private UserDetailsRepository userDetailsRepository;
 
 	@Mock
 	private ClientDetailsEntityService clientDetailsEntityService;

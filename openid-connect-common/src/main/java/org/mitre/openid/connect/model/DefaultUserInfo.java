@@ -19,7 +19,9 @@ package org.mitre.openid.connect.model;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Basic;
@@ -84,6 +86,7 @@ public class DefaultUserInfo implements UserInfo {
 	private Set<UserInfoClientProperty> accountProperties;
 	private Set<UserInfoClientAuthority> accountAuthorities;
 	private Set<UserInfoRealmDetails> accountRealmDetails;
+	private Map<String, String> userProperties;
 	private transient JsonObject src; // source JSON if this is loaded remotely
 	
 
@@ -538,6 +541,33 @@ public class DefaultUserInfo implements UserInfo {
 	    }
 	    
 	}
+	
+    
+	/*
+	 * (non-Javadoc)
+	 * @see org.mitre.openid.connect.model.UserInfo#getUserProperties()
+	 */
+	@Transient
+	@Override
+	public Map<String, String> getUserProperties() {
+		return userProperties;
+	}
+	
+	/*
+	 * (non-Javadoc)
+	 * @see org.mitre.openid.connect.model.UserInfo#setUserProperties(java.util.Map)
+	 */
+	@Override
+	public void setUserProperties(Map<String, String> properties) {
+		if (null==userProperties) {
+			userProperties = new HashMap<>();
+		} else {
+			userProperties.clear();
+		}
+		if (null!=properties && !properties.isEmpty()) {
+			userProperties.putAll(properties);
+		}
+	}
 
     /**
      * Sets the user info account by client.
@@ -591,6 +621,8 @@ public class DefaultUserInfo implements UserInfo {
 			setJsonAccountAuthorities(obj);
 			
 			setJsonAccountRealms(obj);
+			
+			setJsonAccountUserProperties(obj);
 
 			return obj;
 		} else {
@@ -598,8 +630,8 @@ public class DefaultUserInfo implements UserInfo {
 		}
 
 	}
-    
-    /**
+
+	/**
      * Maps the account properties to Json.
      * 
      * @param obj
@@ -622,6 +654,22 @@ public class DefaultUserInfo implements UserInfo {
             obj.add("accountProperties", propertiesMap);
         }
     }
+    
+    /**
+     * Maps the account user properties to Json. 
+     * 
+     * @param obj
+     */
+    private void setJsonAccountUserProperties(JsonObject obj) {
+        if (this.getUserProperties() != null) {
+            
+            JsonObject propertiesMap = new JsonObject();
+            for (Map.Entry<String, String> entry : this.getUserProperties().entrySet()) {
+                propertiesMap.addProperty(entry.getKey(), entry.getValue());
+            }
+            obj.add("edeliveryProperties", propertiesMap);
+        }
+	} 
     
     /**
      * Maps the account realms to Json.
@@ -716,6 +764,9 @@ public class DefaultUserInfo implements UserInfo {
             obj.add("accountDetails", detailsMap);
         }
     }
+
+
+
 
 	/**
 	 * Parse a JsonObject into a UserInfo.
@@ -986,7 +1037,7 @@ public class DefaultUserInfo implements UserInfo {
 		}
 		return true;
 	}
-
+	
 
 	/*
 	 * Custom serialization to handle the JSON object

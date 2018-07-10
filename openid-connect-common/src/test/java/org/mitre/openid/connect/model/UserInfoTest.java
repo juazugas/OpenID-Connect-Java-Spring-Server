@@ -7,7 +7,9 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
@@ -46,6 +48,8 @@ public class UserInfoTest {
     private static final String REALM_NAME2 = "REALM02.COUNTRY";
     private static final String REALM_NAME3 = "REALM03.COUNTRY2";
     
+    private static final String DELIVERY_PROPERTY = "DELIVERY_PROP1";
+    private static final String DELIVERY_VALUE1 = "DELIVERY_VALUE1";
     
     private ClientDetailsEntity publicClient1;
     private ClientDetailsEntity publicClient2;
@@ -113,6 +117,9 @@ public class UserInfoTest {
             Set<UserInfoRealmDetails> realms = createUserRealms();
             userInfo.setAccountRealms(realms);
             
+            Map<String, String> edeliveryProperties = createEdeliveryProperties();
+            userInfo.setUserProperties(edeliveryProperties);
+
         }
 
         _then: try {
@@ -183,6 +190,12 @@ public class UserInfoTest {
             assertFalse(realmsObj.get("isAdmin").getAsBoolean());
             realmPropsObj = realmsObj.get("properties").getAsJsonObject(); 
             assertTrue(realmPropsObj.entrySet().isEmpty());
+
+            JsonObject edeliveryObj = result.get("edeliveryProperties")
+                    .getAsJsonObject();
+            assertTrue(edeliveryObj.has(DELIVERY_PROPERTY));
+            assertEquals(DELIVERY_VALUE1, edeliveryObj.get(DELIVERY_PROPERTY)
+                    .getAsString());
         }
     }
 
@@ -303,6 +316,12 @@ public class UserInfoTest {
         user.setSub(sub);
         user.setPreferredUsername(username);
         return user;
+    }
+
+    private Map<String, String> createEdeliveryProperties () {
+        Map<String, String> props = new HashMap<>();
+        props.put(DELIVERY_PROPERTY, DELIVERY_VALUE1);
+        return props;
     }
 
 }
